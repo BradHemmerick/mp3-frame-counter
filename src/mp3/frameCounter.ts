@@ -16,7 +16,7 @@ export const countMp3Frames = (buffer: Buffer, debug = false): number => {
 
   while (offset < audioEnd) {
     if (offset + FRAME_HEADER_SIZE > buffer.length) {
-      if (debug) console.log(`Not enough bytes for header at offset ${offset}`);
+      if (debug) console.log(`not enough bytes for header at offset ${offset}`);
       break;
     }
 
@@ -27,11 +27,15 @@ export const countMp3Frames = (buffer: Buffer, debug = false): number => {
       continue;
     }
 
-    if (offset + header.frameLength > buffer.length) {
+    if (offset + header.frameLength >= buffer.length) {
       if (debug) {
-        console.log(`frame at offset ${offset} would go past buffer (${offset + header.frameLength} > ${buffer.length})`);
+        console.log(`frame at offset ${offset} would end at or past buffer (${offset + header.frameLength} >= ${buffer.length})`);
       }
       break;
+    }
+
+    if (debug && audioEnd - offset < 1000) {
+      console.log(`frame ${frames + 1}: offset=${offset}, frameLength=${header.frameLength}, nextOffset=${offset + header.frameLength}, audioEnd=${audioEnd}`);
     }
 
     frames += 1;
