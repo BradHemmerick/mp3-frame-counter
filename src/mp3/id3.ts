@@ -37,7 +37,6 @@ export const skipId3v2Tag = (buffer: Buffer): number => {
   return 0;
 };
 
-
 export const getAudioEndOffset = (buffer: Buffer): number => {
   // check if ID3v1 tag exists at the end, had issue where some compressed mp3 was incorrect due to missing tag
   if (buffer.length >= ID3V1_TAG_SIZE) {
